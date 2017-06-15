@@ -1,0 +1,44 @@
+<!--
+ - Created by new on 30.05.2017.
+ -->
+
+<apex:page id="ShoppingCartSummary" showHeader="false" sideBar="false" standardStylesheets="false">
+
+
+    <body onload="init()">
+
+    <div id="on_board" style="color:orange">
+        on board :
+    </div>
+    <div id="total_items" style="color:orange">
+        items :
+    </div>
+    <div id="total_price" style="color:orange">
+        price :
+    </div>
+
+    <script>
+        function init() {
+            //var cart = JSON.parse(localStorage.getItem('cart'));
+            var cart = JSON.parse(document.cookie);
+            if (cart == null) {
+                cart = { "productItems":[]};
+            }
+            var total_price = 0;
+            var total_products = cart.length;
+            var total_items = 0;
+            for (i = 0; i < total_products; i++) {
+                var q = parseInt(cart.productItems[i].quantity);
+                total_items += q;
+                total_price += parseFloat(cart.productItems[i].price) * q;
+            }
+            //document.getElementById('total_items').value = total_items;
+            document.getElementById('total_items').innerHTML = 'items : ' + total_items;
+            //alert(tmp);
+            document.getElementById('total_price').innerHTML = 'price : ' + total_price;
+        }
+    </script>
+
+    </body>
+
+</apex:page>

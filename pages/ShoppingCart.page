@@ -1,0 +1,108 @@
+<apex:page title="Shopping Cart" id="Main" showHeader="false" sideBar="false" controller="Pizza88ShoppingCartController"
+           standardStylesheets="false" docType="html-5.0" cache="false">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <apex:include pageName="Header"/>
+
+    <div class="jumbotron">
+        <div class="container">
+            <center>
+                <p>
+                    <apex:image value="https://drive.google.com/uc?id=0B_e2FZw7Ux-9TTZhbkVsZGlZMnc"/>
+                </p>
+            </center>
+        </div>
+    </div>
+    <center><h1>{!message}</h1></center>
+    <apex:outputPanel id="orderTable">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <apex:repeat value="{!shoppingCart.productItems}" var="item">
+                <tr>
+                    <td>
+                            {!item.product.Name}
+                    </td>
+                    <td>
+                            {!item.product.Price__c}
+                    </td>
+                    <td>
+                            {!item.quantity}
+                    </td>
+
+                    <td>
+                        <apex:form >
+                            <apex:commandLink action="{!removeOneFromCart}" styleClass="btn btn-danger"
+                                              reRender="orderTable">
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                <apex:param value="{!item.product.Id}" name="id" assignTo="{!productId}"/>
+                            </apex:commandLink>
+                        </apex:form>
+                    </td>
+
+                    <td>
+                        <apex:form >
+                            <apex:commandLink action="{!addOneToCart}" styleClass="btn btn-success"
+                                              reRender="orderTable">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                <apex:param value="{!item.product.Id}" name="id" assignTo="{!productId}"/>
+                            </apex:commandLink>
+                        </apex:form>
+                    </td>
+
+                    <td>
+                        <apex:form >
+                            <apex:commandLink action="{!removeFromCart}" styleClass="btn btn-danger"
+                                              reRender="orderTable">
+                                Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                <apex:param value="{!item.product.Id}" name="id" assignTo="{!productId}"/>
+                            </apex:commandLink>
+
+                        </apex:form>
+                    </td>
+                </tr>
+
+            </apex:repeat>
+            <tr>
+                <td></td>
+                <td>/Total checkout/ Items: {!totalItems}, Total Price: {!totalPrice}</td>
+                <td>
+                    <apex:form >
+                        <apex:commandLink action="{!makeOrder}" styleClass="btn btn-success">
+                            Make order <i class="fa fa-cc-visa" aria-hidden="true"></i>
+                        </apex:commandLink>
+
+                    </apex:form>
+
+                </td>
+                <td>
+                    <apex:form >
+                        <apex:commandLink action="{!cancelCart}" styleClass="btn btn-warning">
+                            Cancel <i class="fa fa-window-close-o" aria-hidden="true"></i>
+                        </apex:commandLink>
+                    </apex:form>
+
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </apex:outputPanel>
+
+    <footer>
+        <center><p>&copy; 2017 Denys Drabchuk, Vitalii Leshchenko /ALL RIGHTS RESERVED/</p></center>
+    </footer>
+
+    <script src="https://use.fontawesome.com/55bb65d823.js"></script>
+
+</apex:page>

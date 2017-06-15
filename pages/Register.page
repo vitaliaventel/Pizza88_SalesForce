@@ -1,0 +1,75 @@
+<!--
+ - Created by new on 23.05.2017.
+ -->
+
+<apex:page title="Pizza88 register page" id="Register" showHeader="false" sideBar="false"
+           standardController="Custom_User__c" extensions="CustomUserControllerExtension">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+    <apex:stylesheet value="{!$Resource.login }"/>
+
+    <apex:include pageName="Header"/>
+
+
+    <div class="container">
+        <div class="row main">
+            <div class="panel-heading">
+                <div class="panel-title text-center">
+                    <h1 class="title">Please enter valid data.</h1>
+                    <hr/>
+                </div>
+            </div>
+            <div class="main-login main-center">
+                <apex:form styleClass="form-horizontal">
+                    <div class="form-group">
+                        <apex:outputLabel styleClass="cols-sm-2 control-label" for="name">Name:</apex:outputLabel>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-child fa"
+                                                                   aria-hidden="true"></i></span>
+                                <apex:inputField id="name" value="{!Custom_User__c.Name}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <apex:outputLabel styleClass="cols-sm-2 control-label" for="email">Email:</apex:outputLabel>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope fa"
+                                                                   aria-hidden="true"></i></span>
+                                <apex:inputField id="email" value="{!Custom_User__c.Email__c}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <apex:outputLabel styleClass="cols-sm-2 control-label" for="password">Password:
+                        </apex:outputLabel>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope fa"
+                                                                   aria-hidden="true"></i></span>
+                                <apex:inputSecret id="password" value="{!Custom_User__c.Password__c}" required="true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <apex:commandButton styleClass="btn btn-primary btn-lg btn-block login-button" action="{!save}"
+                                            value="Register"/>
+                    </div>
+
+                </apex:form>
+
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <footer>
+        <center><p>&copy; 2017 Denys Drabchuk, Vitalii Leshchenko /ALL RIGHTS RESERVED/</p></center>
+    </footer>
+
+
+    <script src="https://use.fontawesome.com/55bb65d823.js"></script>
+
+</apex:page>

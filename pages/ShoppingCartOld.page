@@ -1,0 +1,94 @@
+<apex:page title="Shopping Cart" id="sCart" showHeader="false" sideBar="false" controller="ShoppingCartController"
+           standardStylesheets="false" docType="html-5.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+
+    <script>
+        function sendCart() {
+            var cart = JSON.parse(localStorage.getItem('cart'));
+            if (cart == null) {
+                cart = [];
+            }
+            
+
+        }
+    </script>
+
+    <apex:form >
+        <apex:actionFunction name="sendCartToController" action="{!retrieveCart}">
+            <apex:param id="cart" name="cart" value="" />
+        </apex:actionFunction>
+    </apex:form>
+
+
+    <apex:include pageName="Header"/>
+
+    <div class="jumbotron">
+        <div class="container">
+            <center>
+                <p>
+                    <apex:image value="https://drive.google.com/uc?id=0B_e2FZw7Ux-9TTZhbkVsZGlZMnc"/>
+                </p>
+            </center>
+        </div>
+    </div>
+
+    <apex:outputPanel id="orderTable">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <apex:repeat value="{!shoppingCart.productItems}" var="item" >
+            <tr>
+                <td>
+                        {!item.product.Name}
+                </td>
+                <!--<td>
+                        {!item.product.Price__c}
+                </td>-->
+                <td>
+                        {!item.quantity}
+                </td>
+                <td>
+                    <apex:form >
+                        <apex:commandLink action="{!removeFromCart}" styleClass="btn btn-danger" reRender="orderTable">
+                        <!--<apex:commandLink styleClass="btn btn-danger">-->
+                            Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                            <apex:param value="{!item.product.Id}" name="qwerty" assignTo="{!productId}"/>
+                        </apex:commandLink>
+                    </apex:form>
+                </td>
+            </tr>
+
+        </apex:repeat>
+        <tr>
+            <td></td>
+            <td>Total checkout:</td>
+            <td>
+                <apex:form >
+                    <!--<apex:commandLink action="{!makeOrder}" styleClass="btn btn-success">-->
+                    <apex:commandLink styleClass="btn btn-success">
+                        Make order <i class="fa fa-cc-visa" aria-hidden="true"></i>
+                    </apex:commandLink>
+
+                </apex:form>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </apex:outputPanel>
+
+    <footer>
+        <center><p>&copy; 2017 Denys Drabchuk, Vitalii Leshchenko /ALL RIGHTS RESERVED/</p></center>
+    </footer>
+
+    <script src="https://use.fontawesome.com/55bb65d823.js"></script>
+
+</apex:page>

@@ -1,0 +1,227 @@
+<!--
+ - Created by new on 23.05.2017.
+ -->
+<apex:page title="Pizza88 main page" id="Main" showHeader="false" sideBar="false" controller="ProductController"
+           standardStylesheets="false" docType="html-5.0" cache="false">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <apex:include pageName="Header" id="header"/>
+
+
+    <script>
+        function addItemToCart(productId, quantityText,availableQuantity){
+             var quantity = document.getElementById(quantityText).value;
+             if(parseInt(quantity) > parseInt(availableQuantity)){
+                 alert('SORRY! Available quantity is ' + availableQuantity + ' try again.');
+                 return false;
+             }
+
+             if(parseInt(availableQuantity) < 1){
+                 alert('Please enter quantity is greater than zero!');
+                 return false;
+             }
+
+            sendToController(quantity.toString(), productId.toString());
+        }
+
+    </script>
+
+    <apex:form id="actionFunctionId">
+        <apex:actionFunction id="sendToController" name="sendToController" action="{!addToCart}"
+                             reRender="fullBasket, productsPanel">
+            <apex:param id="quantity" name="quantity" value=""/>
+            <apex:param id="prod" value="" name="prod"/>
+        </apex:actionFunction>
+    </apex:form>
+
+    <apex:outputPanel id="fullBasket">
+        <div id="basket" style="height:150px; width:150px; bottom:0; position: fixed;">
+            <a href="/apex/ShoppingCart"><i class="fa fa-opencart" aria-hidden="true"
+                                            style="font-size: 120px; color:green"/></a>
+
+        </div>
+
+        <div id="basketInfo" style="height:100px; width:130px; bottom:0; position: fixed;">
+            <i><b>/Board/
+                Items: {!totalItems}
+                Price: {!totalPrice}</b></i>
+        </div>
+    </apex:outputPanel>
+
+
+    <div class="jumbotron">
+        <div class="container">
+            <center>
+                <p>
+                    <apex:image value="https://drive.google.com/uc?id=0B_e2FZw7Ux-9UjR3NnVDNjN0T00"/>
+                </p>
+            </center>
+        </div>
+    </div>
+
+    <apex:pageblock >
+
+        <apex:pageMessages id="showMessage"></apex:pageMessages>
+
+        <apex:messages id="messages"/>
+
+
+        <apex:outputPanel id="productsPanel">
+
+
+            <div class="container" id="prods">
+                <hr/>
+                <apex:form >
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <center><h2>Categories:</h2></center>
+                        </div>
+                        <div class="col-md-2">
+                            <center>
+                                <apex:commandButton action="{!showAllProducts}" value="All products"
+                                                    styleClass="btn btn-warning" reRender="productsPanel"/>
+                            </center>
+                        </div>
+                        <div class="col-md-2">
+                            <center>
+                                <apex:commandButton action="{!showProductsPizza}" value="Pizza"
+                                                    styleClass="btn btn-warning" reRender="productsPanel"/>
+                            </center>
+                        </div>
+                        <div class="col-md-2">
+                            <center>
+                                <apex:commandButton action="{!showProductsSoup}" value="Soup"
+                                                    styleClass="btn btn-warning" reRender="productsPanel"/>
+                            </center>
+                        </div>
+                        <div class="col-md-2">
+                            <center>
+                                <apex:commandButton action="{!showProductsWog}" value="Wog" styleClass="btn btn-warning"
+                                                    reRender="productsPanel"/>
+                            </center>
+                        </div>
+                        <div class="col-md-2">
+                            <center>
+                                <apex:commandButton action="{!showProductsBurger}" value="Burger"
+                                                    styleClass="btn btn-warning" reRender="productsPanel"/>
+                            </center>
+                        </div>
+                    </div>
+                </apex:form>
+                <center><h1>{!category} ({!products.size})</h1></center>
+                <center><h2>{!message}</h2></center>
+                <hr/>
+
+                <apex:repeat id="productsTable" var="wrap" value="{!products}">
+                    <div class="col-md-3" style="height:450px">
+                        <apex:form >
+                            <center>
+                                <div style="height:280px">
+                                    <h2>{!wrap.product.Name}</h2>
+                                    <p>
+                                        <apex:outputField value="{!wrap.product.Price__c}"/>
+                                    </p>
+                                    <p> Description: {!wrap.product.Description__c}</p>
+                                    <p> Available: {!wrap.product.Available__c}</p>
+                                    <p>
+                                        <apex:image value="{!wrap.product.Image_URL__c}"/>
+                                    </p>
+                                </div>
+                                <p>
+                                    <apex:outputLabel for="quantityInputText" value="Quantity: "/>
+                                    <apex:input type="text" id="quantityInputText"/>
+                                </p>
+                                <p>
+
+                                    <apex:commandLink styleClass="btn btn-success"
+                                                      onClick="addItemToCart('{!wrap.product.Id}', '{!$Component.quantityInputText}','{!wrap.product.Available__c}')"
+                                                      reRender="fullBasket">Add to cart <i
+                                            class="fa fa-shopping-cart"
+                                            aria-hidden="true"/>
+                                    </apex:commandLink>
+                                    <apex:outputText id="selectedQuantity" value="  {!wrap.quantity}"/>
+                                </p>
+                            </center>
+                        </apex:form>
+                    </div>
+                </apex:repeat>
+
+
+            </div>
+        </apex:outputPanel>
+    </apex:pageblock>
+
+
+    <div class="container" id="about">
+        <hr/>
+        <center><h1>ABOUT US</h1></center>
+        <hr/>
+
+        <div id="map" class="col-md-12" style="height: 400px"/>
+
+        <div class="row">
+            <div class="col-md-6">
+                <i>It was our founder’s early travels that fired his imagination and inspired him to introduce pizza to
+                    the
+                    UK. Fresh out of university and with his National Service behind him, Peter travelled and worked his
+                    way
+                    across Europe, through France, Germany and Switzerland, settling eventually in Rome.
+
+                    Not one to shy away from rolling up his sleeves, Peter worked as a reporter for the Associated Press
+                    and
+                    even sold postcards from a barrow in St. Peter’s Square. It was this entrepreneurial spirit, and his
+                    passion for all things Italian that still lie at the heart of what was to become PizzaExpress.</i>
+
+
+            </div>
+
+            <div class="col-md-6">
+                <i> On his return to the UK, Peter was shocked to discover that, unlike in Italy, great tasting pizza
+                    was
+                    nowhere to be found - and that’s how the idea was born. Peter was determined to bring the spirit and
+                    taste of an Italian pizzeria to England.
+
+                    He chose vibrant Soho for what was, at the time, a radical venture. And it paid off. As the
+                    restaurant
+                    opened its doors, everyone from fashionable Londoners to the man in the street flocked to get a
+                    slice.</i>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <hr/>
+
+    <footer>
+        <center><p>&copy; 2017 Denys Drabchuk, Vitalii Leshchenko /ALL RIGHTS RESERVED/</p></center>
+    </footer>
+
+
+    <script type="text/javascript">
+           function initMap() {
+                 myCenter=new google.maps.LatLng(50.4345493,30.5013528);
+                  var mapOptions= {
+                    center:myCenter,
+                    zoom:18, scrollwheel: false, draggable: false,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP
+                  };
+                  var map=new google.maps.Map(document.getElementById("map"),mapOptions);
+                  var marker = new google.maps.Marker({
+                    position: myCenter,
+                  });
+                  marker.setMap(map);
+            }
+
+
+    </script>
+
+    <script type="text/javascript"
+            src="https://maps.google.com/maps/api/js?key=AIzaSyD9tZCuK9s3_TOUF6c852Q7lBWkmNqFpyM&callback=initMap"></script>
+
+    <script src="https://use.fontawesome.com/55bb65d823.js"></script>
+
+</apex:page>
